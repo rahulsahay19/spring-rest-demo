@@ -1,0 +1,6 @@
+2021-11-07 14:11:55 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Data conversion error converting "'' (EMPLOYEE: ""ID"" BIGINT NOT NULL)"; SQL statement:
+INSERT INTO "PUBLIC"."EMPLOYEE"("ID","AGE","DEPARTMENT","EMAIL","LOCATION","NAME")VALUES(?,?,?,?,?,?) [22018-200]
+2021-11-07 14:11:55 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Data conversion error converting "'' (EMPLOYEE: ""ID"" BIGINT NOT NULL)"; SQL statement:
+INSERT INTO "PUBLIC"."EMPLOYEE"("ID","AGE","DEPARTMENT","EMAIL","LOCATION","NAME")VALUES(?,?,?,?,?,?) [22018-200]

@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: Employee Manager
+    version: v1
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:./employeemanager
+
+  jpa:
+    generate-ddl: true
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+server:
+  port: 9090
