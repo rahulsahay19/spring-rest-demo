@@ -6,26 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService{
-//    private static List<Employee> list = new ArrayList<>();
-//    static {
-//        Employee emp = new Employee();
-//        emp.setName("John");
-//        emp.setEmail("john@gmail.com");
-//        emp.setAge(27L);
-//        emp.setDepartment("CS");
-//        emp.setLocation("Bangalore");
-//        list.add(emp);
-//        emp = new Employee();
-//        emp.setName("Tom");
-//        emp.setEmail("tom@gmail.com");
-//        emp.setAge(28L);
-//        emp.setDepartment("CS");
-//        emp.setLocation("Bangalore");
-//        list.add(emp);
-//    }
     @Autowired
     private EmployeeRepository employeeRepository;
     @Override
@@ -36,5 +20,25 @@ public class EmployeeServiceImpl implements EmployeeService{
     @Override
     public Employee saveEmployee(Employee employee) {
         return employeeRepository.save(employee);
+    }
+
+    @Override
+    public Employee getEmployeeById(Long id) {
+        Optional<Employee> employee = employeeRepository.findById(id);
+        if(employee.isPresent()){
+            return employee.get();
+        }
+        throw new RuntimeException("Employee not found for id: "+id);
+    }
+
+    @Override
+    public void deleteEmployee(Long id) {
+        employeeRepository.deleteById(id);
+    }
+
+    @Override
+    public Employee updateEmployee(Employee employee) {
+        //here employee will have id, hence save will update the record
+       return employeeRepository.save(employee);
     }
 }

@@ -32,13 +32,14 @@ public class EmployeeController {
     }
 
     @GetMapping("/employees/{id}")
-    public String getEmployee(@PathVariable Long id){
-        return "Fetching employee details: " + id;
+    public Employee getEmployee(@PathVariable Long id){
+        return employeeService.getEmployeeById(id);
     }
 
     @DeleteMapping("/employees")
     public String deleteEmployee(@RequestParam("id") Long id){
-        return "deleting employee with id: "+id;
+        employeeService.deleteEmployee(id);
+        return "deleted employee with id: "+id;
     }
 
     @PostMapping("/employees")
@@ -50,6 +51,7 @@ public class EmployeeController {
     @PutMapping("/employees/{id}")
     public Employee updateEmployee(@PathVariable Long id, @RequestBody Employee employee){
         System.out.println("Updating the employee data for the employee: " + id);
-        return employee;
+        employee.setId(id);
+        return employeeService.updateEmployee(employee);
     }
 }
