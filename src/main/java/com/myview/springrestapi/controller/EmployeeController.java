@@ -66,6 +66,11 @@ public class EmployeeController {
         return new ResponseEntity<HttpStatus>(HttpStatus.NO_CONTENT);
     }
 
+    @DeleteMapping("/employees/{name}")
+    public ResponseEntity<String> deleteEmployeeByName(@PathVariable("name") String name){
+        return new ResponseEntity<String>(employeeService.deleteEmployeeByName(name) + "No of employees deleted",HttpStatus.NO_CONTENT);
+    }
+
     @PostMapping("/employees")
     public ResponseEntity<Employee> saveEmployee(@Valid @RequestBody Employee employee){
 
