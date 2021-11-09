@@ -61,4 +61,9 @@ public class EmployeeServiceImpl implements EmployeeService{
         Sort sort = Sort.by(Sort.Direction.ASC, "id");
         return employeeRepository.findByNameContaining(keyword, sort);
     }
+
+    @Override
+    public List<Employee> getEmployeesByNameOrLocation(String name, String location) {
+        return employeeRepository.getEmployeesByNameOrLocation(name, location);
+    }
 }
