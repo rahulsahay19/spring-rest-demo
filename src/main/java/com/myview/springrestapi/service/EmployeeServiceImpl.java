@@ -41,4 +41,14 @@ public class EmployeeServiceImpl implements EmployeeService{
         //here employee will have id, hence save will update the record
        return employeeRepository.save(employee);
     }
+
+    @Override
+    public List<Employee> getEmployeesByName(String name) {
+       return employeeRepository.findByName(name);
+    }
+
+    @Override
+    public List<Employee> getEmployeesByNameAndLocation(String name, String location) {
+        return employeeRepository.findByNameAndLocation(name, location);
+    }
 }

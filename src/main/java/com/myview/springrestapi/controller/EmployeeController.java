@@ -4,6 +4,8 @@ import com.myview.springrestapi.model.Employee;
 import com.myview.springrestapi.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -28,31 +30,42 @@ public class EmployeeController {
     }
 
     @GetMapping("/employees")
-    public List<Employee> getEmployees(){
-        return employeeService.getEmployees();
+    public ResponseEntity<List<Employee>> getEmployees(){
+
+        return new ResponseEntity<List<Employee>>(employeeService.getEmployees(), HttpStatus.OK);
     }
 
     @GetMapping("/employees/{id}")
-    public Employee getEmployee(@PathVariable Long id){
-        return employeeService.getEmployeeById(id);
+    public ResponseEntity<Employee> getEmployee(@PathVariable Long id){
+        return new ResponseEntity<Employee>(employeeService.getEmployeeById(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/employees/filterByName/{name}")
+    public ResponseEntity<List<Employee>> getEmployeesByName(@PathVariable String name){
+        return new ResponseEntity<List<Employee>>(employeeService.getEmployeesByName(name), HttpStatus.OK);
+    }
+
+    @GetMapping("/employees/filterByNameAndLocation")
+    public ResponseEntity<List<Employee>> getEmployeesByNameAndLocation(@RequestParam String name, @RequestParam String location){
+        return new ResponseEntity<List<Employee>>(employeeService.getEmployeesByNameAndLocation(name, location), HttpStatus.OK);
     }
 
     @DeleteMapping("/employees")
-    public String deleteEmployee(@RequestParam("id") Long id){
+    public ResponseEntity<HttpStatus> deleteEmployee(@RequestParam("id") Long id){
         employeeService.deleteEmployee(id);
-        return "deleted employee with id: "+id;
+        return new ResponseEntity<HttpStatus>(HttpStatus.NO_CONTENT);
     }
 
     @PostMapping("/employees")
-    public Employee saveEmployee(@Valid @RequestBody Employee employee){
+    public ResponseEntity<Employee> saveEmployee(@Valid @RequestBody Employee employee){
 
-        return employeeService.saveEmployee(employee);
+        return new ResponseEntity<Employee>(employeeService.saveEmployee(employee), HttpStatus.CREATED);
     }
 
     @PutMapping("/employees/{id}")
-    public Employee updateEmployee(@PathVariable Long id, @RequestBody Employee employee){
+    public ResponseEntity<Employee> updateEmployee(@PathVariable Long id, @RequestBody Employee employee){
         System.out.println("Updating the employee data for the employee: " + id);
         employee.setId(id);
-        return employeeService.updateEmployee(employee);
+        return new ResponseEntity<Employee>(employeeService.updateEmployee(employee), HttpStatus.OK);
     }
 }
