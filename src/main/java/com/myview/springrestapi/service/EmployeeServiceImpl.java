@@ -5,6 +5,7 @@ import com.myview.springrestapi.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -57,6 +58,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 
     @Override
     public List<Employee> getEmployeesByKeyword(String keyword) {
-        return employeeRepository.findByNameContaining(keyword);
+        Sort sort = Sort.by(Sort.Direction.ASC, "id");
+        return employeeRepository.findByNameContaining(keyword, sort);
     }
 }
