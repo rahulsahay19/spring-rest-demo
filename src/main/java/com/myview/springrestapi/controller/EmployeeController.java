@@ -1,6 +1,10 @@
 package com.myview.springrestapi.controller;
 
+import com.myview.springrestapi.model.Department;
 import com.myview.springrestapi.model.Employee;
+import com.myview.springrestapi.repository.DepartmentRepository;
+import com.myview.springrestapi.repository.EmployeeRepository;
+import com.myview.springrestapi.request.EmployeeRequest;
 import com.myview.springrestapi.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +21,12 @@ public class EmployeeController {
 
     @Autowired
     private EmployeeService employeeService;
+
+    @Autowired
+    private EmployeeRepository employeeRepository;
+
+    @Autowired
+    private DepartmentRepository departmentRepository;
 
     @Value("${spring.application.name: Employee Tracker}")
     private String appName;
@@ -40,41 +50,22 @@ public class EmployeeController {
         return new ResponseEntity<Employee>(employeeService.getEmployeeById(id), HttpStatus.OK);
     }
 
-    @GetMapping("/employees/filterByName/{name}")
-    public ResponseEntity<List<Employee>> getEmployeesByName(@PathVariable String name){
-        return new ResponseEntity<List<Employee>>(employeeService.getEmployeesByName(name), HttpStatus.OK);
-    }
-
-    @GetMapping("/employees/filterByKeyword/{keyword}")
-    public ResponseEntity<List<Employee>> getEmployeesByKeyWord(@PathVariable String keyword){
-        return new ResponseEntity<List<Employee>>(employeeService.getEmployeesByKeyword(keyword), HttpStatus.OK);
-    }
-
-    @GetMapping("/employees/{name}/{location}")
-    public ResponseEntity<List<Employee>> getEmployeesByNameOrLocation(@PathVariable String name, @PathVariable String location){
-        return new ResponseEntity<List<Employee>>(employeeService.getEmployeesByNameOrLocation(name, location), HttpStatus.OK);
-    }
-
-    @GetMapping("/employees/filterByNameAndLocation")
-    public ResponseEntity<List<Employee>> getEmployeesByNameAndLocation(@RequestParam String name, @RequestParam String location){
-        return new ResponseEntity<List<Employee>>(employeeService.getEmployeesByNameAndLocation(name, location), HttpStatus.OK);
-    }
-
     @DeleteMapping("/employees")
     public ResponseEntity<HttpStatus> deleteEmployee(@RequestParam("id") Long id){
         employeeService.deleteEmployee(id);
         return new ResponseEntity<HttpStatus>(HttpStatus.NO_CONTENT);
     }
 
-    @DeleteMapping("/employees/{name}")
-    public ResponseEntity<String> deleteEmployeeByName(@PathVariable("name") String name){
-        return new ResponseEntity<String>(employeeService.deleteEmployeeByName(name) + "No of employees deleted",HttpStatus.NO_CONTENT);
-    }
 
     @PostMapping("/employees")
-    public ResponseEntity<Employee> saveEmployee(@Valid @RequestBody Employee employee){
-
-        return new ResponseEntity<Employee>(employeeService.saveEmployee(employee), HttpStatus.CREATED);
+    public ResponseEntity<Employee> saveEmployee(@Valid @RequestBody EmployeeRequest employeeRequest){
+        Department dept = new Department();
+        dept.setName(employeeRequest.getDepartment());
+        dept = departmentRepository.save(dept);
+        Employee emp = new Employee(employeeRequest);
+        emp.setDepartment(dept);
+        emp = employeeRepository.save(emp);
+        return new ResponseEntity<Employee>(emp, HttpStatus.CREATED);
     }
 
     @PutMapping("/employees/{id}")
